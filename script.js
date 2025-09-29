@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. กำหนด URL ของ API Endpoint
-    const API_URL = 'http://localhost:3000/api/threads';
+    const API_URL = 'https://mini-forumbackend.onrender.com/api/threads';
     const threadListElement = document.getElementById('thread-list');
 
     // ฟังก์ชันสำหรับดึงและแสดงข้อมูลกระทู้
