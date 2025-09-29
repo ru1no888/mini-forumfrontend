@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ / สมัครสมาชิก</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        /* CSS เฉพาะสำหรับฟอร์มล็อกอิน */
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .auth-container h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .btn-submit {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover { background-color: #2980b9; }
+        .toggle-auth {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .error-message { color: red; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1><a href="index.html">Mini Forum</a></h1>
+            <nav>
+                <a href="index.html">กระทู้</a>
+                <a href="profile.html">โปรไฟล์</a>
+            </nav>
+            <div class="user-actions">
+                <a href="create_thread.html" class="btn btn-primary">+ สร้างกระทู้</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth-container">
+            <h2 id="auth-title">สมัครสมาชิก</h2>
+            <form id="auth-form">
+                <div class="form-group" id="username-group">
+                    <label for="username">ชื่อผู้ใช้</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">อีเมล</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submit-button">สมัครสมาชิก</button>
+                <p class="error-message" id="auth-message"></p>
+            </form>
+            <p class="toggle-auth">
+                มีบัญชีอยู่แล้ว? <a href="#" id="toggle-link">เข้าสู่ระบบ</a>
+            </p>
+        </div>
+    </main>
+
+    <footer><p>&copy; 2024 Mini Forum Project | MVP Stage</p></footer>
+
+    <script src="auth.js"></script> 
+</body>
+</html>
