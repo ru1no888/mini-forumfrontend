@@ -8,25 +8,37 @@
 </head>
 <body>
     <header>
-        <h1>Mini Forum</h1>
-        <nav>
-            <a href="#">หน้าหลัก</a>
-            <a href="#" class="btn-create">+ สร้างกระทู้ใหม่</a>
-            <a href="#" class="btn-login">เข้าสู่ระบบ</a>
-        </nav>
+        <div class="container header-content">
+            <h1><a href="index.html">Mini Forum</a></h1>
+            <nav>
+                <a href="index.html" class="active">กระทู้</a>
+                <a href="profile.html">โปรไฟล์</a>
+                <a href="admin.html" id="admin-link" style="display: none;">Admin Panel</a>
+            </nav>
+            <div class="user-actions">
+                <a href="create_thread.html" class="btn btn-primary">+ สร้างกระทู้</a>
+                <a href="login.html" class="btn btn-secondary" id="auth-link">เข้าสู่ระบบ</a>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section class="forum-category">
-            <h2>รายการกระทู้ล่าสุด</h2>
+    <main class="container">
+        <section class="latest-threads">
+            <h2>🔥 กระทู้ล่าสุด</h2>
+            <div class="category-filter">
+                <select id="category-filter">
+                    <option value="">-- ทุกหมวดหมู่ --</option>
+                    </select>
+            </div>
+            
             <div id="thread-list">
-                <p>กำลังโหลดกระทู้...</p>
+                <p class="loading-message">กำลังโหลดข้อมูลกระทู้...</p>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Mini Forum Project.</p>
+        <p>&copy; 2024 Mini Forum Project | MVP Stage</p>
     </footer>
 
     <script src="script.js"></script> 

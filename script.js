@@ -1,51 +1,61 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. กำหนด URL ของ API Endpoint
-    const API_URL = 'https://mini-forumbackend.onrender.com/api/threads';
+    // 🛑 สิ่งที่ต้องระวัง: URL ของ API
+    // ใช้ตัวแปร BASE_API_URL เพื่อให้ง่ายต่อการแก้ไข URL ของ Render ในอนาคต
+    const BASE_API_URL = 'https://mini-forumbackend.onrender.com'; // 
+    const API_THREAD_PATH = '/api/threads'; // Endpoint คงที่
     const threadListElement = document.getElementById('thread-list');
 
     // ฟังก์ชันสำหรับดึงและแสดงข้อมูลกระทู้
     async function fetchAndRenderThreads() {
+        // 🛑 สิ่งที่ต้องระวัง: การจัดการ Error (B. การจัดการ Error)
         try {
-            // 2. ดึงข้อมูลจาก Backend API
-            const response = await fetch(API_URL);
+            // ดึงข้อมูลจาก Backend API
+            const response = await fetch(BASE_API_URL + API_THREAD_PATH);
             
-            // ตรวจสอบสถานะ response
+            // 🛑 สิ่งที่ต้องระวัง: Async Logic - ตรวจสอบ Response Status
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // หาก API ส่งสถานะที่ไม่ใช่ 2xx ให้แสดง Error ชัดเจน
+                throw new Error(`API Request Failed: HTTP status ${response.status}`);
             }
 
-            // 3. แปลงข้อมูลที่ได้เป็น JSON
+            // แปลงข้อมูลที่ได้เป็น JSON
             const threads = await response.json();
 
-            // 4. ล้างข้อความ "กำลังโหลด"
+            // ล้างข้อความ "กำลังโหลด"
             threadListElement.innerHTML = ''; 
 
             if (threads.length === 0) {
-                threadListElement.innerHTML = '<p>ไม่มีกระทู้ในฟอรัมนี้</p>';
+                threadListElement.innerHTML = '<p class="text-center">ยังไม่มีกระทู้ในฟอรัมนี้</p>';
                 return;
             }
 
-            // 5. วนลูปและสร้าง Element สำหรับแต่ละกระทู้
+            // วนลูปและสร้าง Element สำหรับแต่ละกระทู้
             threads.forEach(thread => {
-                const article = document.createElement('article');
-                article.className = 'thread-item';
-
-                // จัดรูปแบบวันที่ให้สวยงาม (toLocaleDateString)
+                // 🛑 สิ่งที่ต้องระวัง: JSON Schema - ตรวจสอบว่า Field ที่ต้องการมีอยู่
+                // ป้องกันโค้ดพังหาก Backend เปลี่ยนชื่อ Field (เช่น users(username))
+                const username = thread.users ? thread.users.username : 'Unknown User';
+                const categoryName = thread.categories ? thread.categories.name : 'Uncategorized';
+                
                 const date = new Date(thread.createdAt).toLocaleDateString('th-TH', { 
                     year: 'numeric', month: 'short', day: 'numeric' 
                 });
                 
-                // สร้างโครงสร้าง HTML สำหรับกระทู้
+                const article = document.createElement('article');
+                article.className = 'thread-item';
+                
                 article.innerHTML = `
-                    <h3><a href="thread.html?id=${thread.id}">${thread.title}</a></h3>
-                    <p class="thread-meta">
-                        หมวดหมู่: **${thread.categoryName}** | โดย: ${thread.username} | เมื่อ: ${date}
-                    </p>
-                    <p class="thread-stats">
-                        ตอบกลับ: 0 | เข้าชม: 0 
+                    <div class="thread-details">
+                        <h3><a href="thread.html?id=${thread.id}">${thread.title}</a></h3>
+                        <p class="thread-meta">
+                            ในหมวด: <strong>${categoryName}</strong> | โดย: ${username} | เมื่อ: ${date}
                         </p>
+                    </div>
+                    <div class="thread-stats">
+                        <span class="stat-box">ตอบ: <span>${thread.reply_count || 0}</span></span>
+                        <span class="stat-box">เข้าชม: <span>${thread.view_count || 0}</span></span>
+                    </div>
                 `;
                 
                 threadListElement.appendChild(article);
@@ -53,10 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
-            threadListElement.innerHTML = `<p style="color: red;">ไม่สามารถเชื่อมต่อกับ Server ได้: ${error.message}</p>`;
+            // แจ้งผู้ใช้ว่าไม่สามารถเชื่อมต่อได้ (อาจเกิดจาก Render Free Tier Sleep)
+            threadListElement.innerHTML = `
+                <p class="loading-message" style="color: red; text-align: center;">
+                    ⚠️ ไม่สามารถเชื่อมต่อกับ Server ได้ (API Down/URL ผิด): ${error.message}
+                </p>`;
         }
     }
 
-    // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
     fetchAndRenderThreads();
 });
